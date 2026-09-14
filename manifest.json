@@ -1,0 +1,14 @@
+{
+  "name": "Mi Plan · 28 días",
+  "short_name": "Mi Plan",
+  "description": "Plan de alimentación de 28 días y seguimiento personal.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f5f3",
+  "theme_color": "#35b887",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

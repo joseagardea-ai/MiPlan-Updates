@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="mi-plan-build" content="12.1.0-web">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#35b887">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi Plan · 28 días</title>
+<style>.nextmeal{margin-top:10px;padding:10px 12px;border-radius:13px;background:#f0faf6;color:#247c59;font-size:13px;font-weight:""}.waterdots{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:14px}.waterdots span{height:30px;border-radius:9px;background:#edf1f3;display:flex;align-items:center;justify-content:center;font-size:14px}.waterdots span.on{background:#e9f8f1}.daytabs button.done{outline:2px solid #b9e8d4}.meal.done{opacity:.92}.meal.done .badge{background:#dff6ea}.btnrow{display:flex;gap:8px;margin-top:12px}.btnrow button{flex:1}
+
+.homeSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}.homeStat{background:#fff;border-radius:16px;padding:11px 7px;text-align:center;box-shadow:0 4px 15px #0000000b;border:1px solid var(--line)}.homeStat .emoji{font-size:20px;display:block;margin-bottom:3px}.homeStat b{font-size:15px}.homeStat small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.motivation{background:linear-gradient(135deg,#e9f8f1,#f8fbfa);border:1px solid #d8eee4;border-radius:18px;padding:14px 15px;margin-bottom:12px}.motivation b{font-size:15px}.motivation p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.35}.daytabs{margin-bottom:0}.homeTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.homeTitle .dayBadge{background:#e9f8f1;color:var(--g);padding:6px 9px;border-radius:11px;font-size:11px;font-weight:800;white-space:nowrap}
+:root{--g:#36b37e;--gd:#279c6c;--dark:#17212b;--muted:#73808a;--bg:#f5f7f8;--line:#e7ecef}
+*{box-sizing:border-box}body{margin:0;background:#dfe5e8;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--dark)}
+.phone{width:100%;max-width:430px;min-height:100vh;margin:auto;background:var(--bg);padding-bottom:78px}
+.top{background:linear-gradient(145deg,var(--g),var(--gd));color:#fff;padding:23px 19px 20px;border-radius:0 0 28px 28px}
+.top small{opacity:.85}.top h1{margin:4px 0 2px;font-size:29px}.top p{margin:0;font-size:13px;opacity:.9}
+.weekpick{margin-top:14px;width:100%;padding:11px;border:0;border-radius:12px;background:#ffffff24;color:#fff;font-weight:800}
+.progressbox{margin-top:12px;background:#ffffff24;border-radius:17px;padding:12px}.progressrow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}.track{height:9px;background:#ffffff38;border-radius:10px;overflow:hidden}.fill{height:100%;width:0;background:#fff}
+main{padding:15px}.screen{display:none}.screen.active{display:block}
+.hero,.card,.meal{background:#fff;border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 4px 15px #0000000b}
+.hero b{font-size:18px}.muted{color:var(--muted);font-size:13px}
+.meal{border-left:5px solid var(--g)}.mealhead{display:flex;justify-content:space-between;align-items:center}.meal h3{margin:0;font-size:17px}.time{font-size:13px;font-weight:800;color:var(--g);background:#e9f8f1;padding:7px 9px;border-radius:11px}
+.food{display:flex;gap:10px;align-items:center;margin:9px 0;font-size:14px}.food input,.check input{width:19px;height:19px;accent-color:var(--g)}
+.badge{font-size:11px;font-weight:800;color:var(--g);background:#e9f8f1;border-radius:9px;padding:5px 8px}
+button{border:0;border-radius:12px;padding:11px 14px;background:var(--g);color:white;font-weight:700;cursor:pointer}.secondary{background:#edf1f3;color:var(--dark)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.daytabs{display:flex;gap:6px;overflow:auto;margin:12px 0}.daytabs button{white-space:nowrap;padding:8px 11px;font-size:12px;background:#edf1f3;color:var(--dark)}.daytabs button.active{background:var(--g);color:#fff}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);height:84px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:20;box-shadow:0 -5px 20px #00000010;padding:5px 2px 6px;gap:2px}.nav button{flex:1;background:#fff;color:#78838b;border-radius:13px;padding:3px 1px 3px;font-size:10px;font-weight:700;line-height:1.15;min-width:0}.nav button .navicon{display:flex;align-items:center;justify-content:center;width:39px;height:39px;margin:0 auto 3px;border-radius:12px;font-size:25px;line-height:1;background:#f4f6f7;transition:.18s}.nav button.active{color:var(--g);background:#f0faf6}.nav button.active .navicon{background:#dff6ea;transform:scale(1.06);box-shadow:0 3px 9px #0000000d}.nav button:active .navicon{transform:scale(.96)}
+input[type=text],input[type=time],input[type=number]{width:100%;padding:11px;border:1px solid #d8e0e4;border-radius:11px;background:#fbfcfd}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:30}.modal.show{display:flex}.sheet{width:min(430px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:25px 25px 0 0;padding:20px}.sheet h2{margin-top:0}.itemrow{display:flex;gap:7px;margin:8px 0}.itemrow input{flex:1}.tiny{padding:8px 10px}.shopTabs{display:flex;gap:7px;margin:14px 0}.shopTabs button{flex:1;padding:10px 5px;font-size:12px;border:1px solid var(--line);background:#f7f9fa;color:var(--text);border-radius:12px;font-weight:700}.shopTabs button.active{background:var(--g);color:#fff;border-color:var(--g);box-shadow:0 4px 10px rgba(0,0,0,.08)}.shopbox{background:#f8fafb;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:10px 0;overflow:hidden}.shopbox>b{display:block;padding:2px 2px 8px;font-size:13px}.shoprow{display:grid;grid-template-columns:1fr 92px;gap:10px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--line);transition:.18s}.shoprow:last-child{border-bottom:0}.shoprow small{display:block;color:var(--muted);font-size:11px;margin-top:3px;line-height:1.25}.shoprow input[type=checkbox]{width:22px;height:22px;accent-color:var(--g);cursor:pointer;vertical-align:middle}.shoprow label{cursor:pointer}.shopdone{opacity:.72;background:#eef8f3;border-radius:10px;padding-left:9px;padding-right:9px}.shopsummary{background:linear-gradient(135deg,#e9f8f1,#f3fbf7);border:1px solid #d7eee3;border-radius:16px;padding:13px;margin:10px 0;font-size:13px}.shopsummary b{font-size:14px}.shopempty{text-align:center;padding:22px 10px;color:var(--muted);font-size:13px;background:#f8fafb;border:1px dashed var(--line);border-radius:14px}.weightHero{background:linear-gradient(145deg,#ffffff,#f2faf6);border:1px solid #dceee5;border-radius:20px;padding:18px;margin-bottom:12px;text-align:center}.weightValue{font-size:38px;font-weight:900;letter-spacing:-1px}.weightDelta{display:inline-block;margin-top:7px;padding:7px 11px;border-radius:12px;font-size:13px;font-weight:800}.weightDown{background:#e9f8f1;color:#21845d}.weightUp{background:#fff1f1;color:#b34b4b}.weightSame{background:#eef2f4;color:#68747d}.weightChart{height:150px;display:flex;align-items:flex-end;gap:7px;padding:12px 4px 2px;border-bottom:1px solid var(--line);overflow:hidden}.weightBar{flex:1;min-width:14px;border-radius:9px 9px 3px 3px;background:linear-gradient(180deg,var(--g),#bdebd6);position:relative}.weightBar small{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);white-space:nowrap;margin-bottom:4px}.weightLabels{display:flex;gap:7px;margin-top:6px}.weightLabels span{flex:1;text-align:center;font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden}.weightStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.weightStat{background:#f8fafb;border:1px solid var(--line);border-radius:14px;padding:10px 7px;text-align:center}.weightStat b{display:block;font-size:16px}.weightStat small{color:var(--muted);font-size:10px}.goalBox{margin-top:12px;padding:12px;border-radius:15px;background:#f8fafb;border:1px solid var(--line)}.goalProgress{height:9px;background:#e8eef0;border-radius:10px;overflow:hidden;margin-top:8px}.goalProgress div{height:100%;width:0;background:var(--g);border-radius:10px}.weightEmpty{text-align:center;padding:15px;color:var(--muted);font-size:13px;background:#f8fafb;border-radius:14px}.reminderCard{border:1px solid var(--line);border-radius:16px;padding:12px;margin:9px 0;background:#fbfcfd}.reminderHead{display:flex;justify-content:space-between;align-items:center;gap:10px}.switch{position:relative;width:48px;height:28px;display:inline-block}.switch input{display:none}.slider{position:absolute;inset:0;background:#dfe5e8;border-radius:30px;cursor:pointer;transition:.2s}.slider:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 2px 5px #0002;transition:.2s}.switch input:checked+.slider{background:var(--g)}.switch input:checked+.slider:before{transform:translateX(20px)}.reminderOn{background:#f0faf6;border-color:#d6eee3}.weightPromptIcon{font-size:46px;text-align:center;margin:2px 0 8px}.weightPrompt{text-align:center}.weightPrompt .promptBox{background:linear-gradient(145deg,#f0faf6,#ffffff);border:1px solid #d8eee4;border-radius:18px;padding:14px;margin:12px 0}.weightPrompt input{font-size:20px;text-align:center;font-weight:800}.weightPrompt .promptBtns{display:flex;gap:8px;margin-top:10px}.weightPrompt .promptBtns button{flex:1}
+.recBtn{width:100%;margin-top:10px;background:#f0faf6;color:var(--gd);border:1px solid #d7eee3}.recBtn:hover{background:#e5f7ef}.recTitle{display:flex;align-items:center;gap:8px}.recOption{border:1px solid var(--line);border-radius:16px;padding:13px;margin:10px 0;background:#fbfcfd}.recOption h3{font-size:15px;margin:0 0 8px}.recOption p{font-size:13px;line-height:1.45;margin:5px 0;color:#394650}.recNote{font-size:11px;color:var(--muted);background:#f5f7f8;padding:9px;border-radius:10px;margin-top:8px}.sourceTag{display:inline-block;font-size:10px;font-weight:800;color:#247c59;background:#e9f8f1;border-radius:8px;padding:4px 7px;margin-bottom:6px}
+</style>
+
+<style>
+.waIcon{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  fill:currentColor;
+  vertical-align:middle;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.12));
+}
+</style>
+
+
+<style>
+.waSend{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+}
+</style>
+
+
+<script>
+/* ============================================================
+   MI PLAN — BASE ACTUALIZABLE V12
+   La versión de la aplicación y el contenido se identifican
+   por separado de los datos personales guardados.
+   ============================================================ */
+const MI_PLAN_APP_VERSION = "12.0.0";
+const MI_PLAN_CONTENT_VERSION = "1.0.0";
+const MI_PLAN_UPDATE_CHANNEL = "stable";
+
+function miPlanUpdateInfo(){
+  return {
+    appVersion: MI_PLAN_APP_VERSION,
+    contentVersion: MI_PLAN_CONTENT_VERSION,
+    channel: MI_PLAN_UPDATE_CHANNEL
+  };
+}
+
+/* Exportación de respaldo: permite conservar los datos antes
+   de instalar una futura actualización. */
+function exportMiPlanBackup(){
+  try{
+    const raw = localStorage.getItem("miPlanV7");
+    const backup = {
+      format: "MiPlanBackup",
+      version: 1,
+      createdAt: new Date().toISOString(),
+      data: raw ? JSON.parse(raw) : {}
+    };
+    const blob = new Blob([JSON.stringify(backup,null,2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "MiPlan_respaldo_" + new Date().toISOString().slice(0,10) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(e){
+    alert("No se pudo crear el respaldo.");
+  }
+}
+
+function importMiPlanBackup(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const backup = JSON.parse(reader.result);
+      if(!backup || backup.format !== "MiPlanBackup" || !backup.data){
+        throw new Error("Formato inválido");
+      }
+      localStorage.setItem("miPlanV7", JSON.stringify(backup.data));
+      location.reload();
+    }catch(e){
+      alert("El archivo de respaldo no es válido.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* Punto único para futuras actualizaciones remotas.
+   Por ahora informa la versión instalada; no descarga nada
+   automáticamente hasta que configuremos el servidor/canal. */
+function checkMiPlanUpdate(){
+  return miPlanUpdateInfo();
+}
+
+window.miPlanUpdateInfo = miPlanUpdateInfo;
+window.exportMiPlanBackup = exportMiPlanBackup;
+window.importMiPlanBackup = importMiPlanBackup;
+window.checkMiPlanUpdate = checkMiPlanUpdate;
+</script>
+
+</head>
+<body>
+<div class="phone">
+<header class="top"><small>MI PLAN DE ALIMENTACIÓN · 28 DÍAS</small><h1>Hola 👋</h1><p id="headerDate"></p>
+<select id="weekSelect" class="weekpick" onchange="changeWeek(this.value)"></select>
+<div class="progressbox"><div class="progressrow"><span>Progreso de hoy</span><b id="pct">0%</b></div><div class="progressrow" style="margin-top:6px"><span id="weekProgress">0% semana</span><span>5 comidas</span></div><div class="track"><div id="fill" class="fill"></div></div></div></header>
+
+<main>
+<section id="home" class="screen active">
+<div class="hero"><div class="homeTitle"><div><div class="muted">Tu semana actual</div><b id="weekHero"></b></div><span class="dayBadge" id="homeDayBadge">Día 1 de 7</span></div><div id="nextMeal" class="nextmeal"></div><div class="daytabs" id="daytabs"></div></div>
+<div class="homeSummary"><div class="homeStat"><span class="emoji">🍽️</span><b id="homeMealsStat">0/5</b><small>comidas</small></div><div class="homeStat"><span class="emoji">💧</span><b id="homeWaterStat">0/10</b><small>vasos</small></div><div class="homeStat"><span class="emoji">⚖️</span><b id="homeWeightStat">—</b><small>peso actual</small></div></div>
+<div class="motivation" id="motivationCard"><b>💪 Vamos paso a paso</b><p>Completa tus comidas y mantén tu constancia.</p></div>
+<div id="meals"></div>
+</section>
+
+<section id="week" class="screen"><div class="card"><h2>📅 Semanas</h2><div class="muted">Las semanas cambian las combinaciones; las porciones de tu plan médico permanecen fijas.</div><div class="badge" style="display:inline-block;margin-top:10px">✓ 28 días cargados</div><div id="weekManager" style="margin-top:10px"></div></div></section>
+
+<section id="plan" class="screen"><div class="card"><h2>📖 Mi plan médico</h2><p class="muted">Esta es la base fija. Las semanas no cambian estas porciones.</p><div id="planRules"></div></div><div class="card"><h2>🥗 Equivalencias</h2><div id="equiv"></div></div></section>
+
+<section id="water" class="screen"><div class="card"><h2>💧 Agua</h2><div style="text-align:center;font-size:44px">💧</div><div class="row"><span>Vasos de hoy</span><b id="waterBig">0 / 10</b></div><div class="waterdots" id="waterDots"></div><div class="actions" style="margin-top:14px"><button onclick="water(1)">+ 1 vaso</button><button class="secondary" onclick="water(0)">Reiniciar día</button></div><p class="muted">La meta es de 10 vasos. El contador se reinicia automáticamente al cambiar la fecha.</p></div></section>
+
+<section id="progress" class="screen"><div class="card"><h2>📈 Progreso</h2><div class="row"><span>Comidas completadas hoy</span><b id="mealStat">0 / 5</b></div><div class="row"><span>Progreso del día</span><b id="pct2">0%</b></div><div class="row"><span>Progreso de la semana</span><b id="weekStat">0%</b></div><div class="row"><span>Agua</span><b id="waterStat">0 / 10</b></div></div><div class="card"><h2>⚖️ Mi progreso de peso</h2><div id="weightPanel"></div><div class="goalBox"><b>🎯 Mi objetivo</b><p class="muted" style="margin:5px 0 8px">Opcional: establece un peso objetivo para ver tu avance.</p><div style="display:flex;gap:8px"><input id="weightGoal" type="number" step=".1" placeholder="Ej. 82 kg"><button onclick="saveWeightGoal()">Guardar</button></div></div><div style="margin-top:14px"><b>Registrar peso</b><input id="weight" type="number" step=".1" placeholder="Peso de hoy (kg)" style="margin-top:7px"><button style="margin-top:9px;width:100%" onclick="saveWeight()">⚖️ Guardar peso</button></div><div id="history" style="margin-top:14px"></div></div></section>
+
+<section id="shopping" class="screen"><div class="card"><h2>🛒 Compras</h2><p class="muted">Primero revisa todo lo que necesitas para la semana. Después indica solamente qué productos ya tienes en casa y la app calculará lo que realmente debes comprar.</p><div class="shopTabs"><button id="shopTabNeed" class="active" onclick="shopTab('need')">📋 Necesito</button><button id="shopTabHome" onclick="shopTab('home')">🏠 Tengo</button><button id="shopTabBuy" onclick="shopTab('buy')">🛍️ Comprar</button></div><div id="shop"></div></div></section>
+<section id="settings" class="screen"><div class="card"><h2>⚙️ Ajustes</h2><div id="miPlanVersionBadge" class="muted" style="font-size:11px;text-align:center;margin-top:10px">Mi Plan · v12.0.0 · Base actualizable</div><p class="muted">Puedes cambiar horarios sin modificar las porciones médicas.</p><div id="times"></div><button onclick="saveTimes()">Guardar horarios</button></div><div class="card"><h2>🔔 Mis recordatorios</h2><p class="muted">Activa solo los avisos que quieras recibir. Los horarios usan los que hayas guardado arriba.</p><div id="remindersList"></div><div class="shopsummary" style="margin-top:12px"><b>📱 Preparado para Android</b><br><span class="muted">En esta versión HTML los avisos dependen de que el navegador permita notificaciones. En el futuro APK podrán convertirse en alarmas del sistema aunque la app esté cerrada.</span></div><button onclick="notify()">🔔 Dar permiso de notificaciones</button></div></section>
+</main>
+
+<div id="recommendModal" class="modal" onclick="if(event.target===this)closeRecommendations()"><div class="sheet"><div style="display:flex;justify-content:flex-end"><button class="secondary tiny" onclick="closeRecommendations()">✕ Cerrar</button></div><div id="recommendBody"></div></div></div>
+<nav class="nav">
+<button class="active" onclick="go('home',this)"><span class="navicon">🏠</span>Inicio</button><button onclick="go('week',this)"><span class="navicon">📅</span>Semanas</button><button onclick="go('plan',this)"><span class="navicon">📖</span>Plan</button><button onclick="go('water',this)"><span class="navicon">💧</span>Agua</button><button onclick="go('progress',this)"><span class="navicon">📈</span>Progreso</button><button onclick="go('shopping',this)"><span class="navicon">🛒</span>Compras</button><button onclick="go('settings',this)"><span class="navicon">⚙️</span>Ajustes</button>
+</nav>
+</div>
+<div id="modal" class="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+(function(){
+  try {
+    const KEY="miPlanV7";
+    const RESET_FLAG="miPlanWeightReset_2026_09_14";
+    if(!localStorage.getItem(RESET_FLAG)){
+      const raw=localStorage.getItem(KEY);
+      if(raw){
+        const data=JSON.parse(raw);
+        if(data && typeof data==="object"){
+          data.weights=[];
+          data.weight="";
+          localStorage.setItem(KEY,JSON.stringify(data));
+        }
+      }
+      localStorage.setItem(RESET_FLAG,"1");
+    }
+  }catch(e){}
+})();
+
+const plan={
+ breakfast:"1 leche + 1 carne + 2 cereal/pan/tortilla + 1 fruta + verduras a llenar + 0 grasas",
+ snack:"Verduras a llenar",
+ lunch:"3 carnes + 2 cereal/pan/tortilla + 1 fruta + verduras a llenar + 0 grasas",
+ dinner:"1 carne + 2 cereal/pan/tortilla + 1 fruta + verduras a llenar + 0 grasas"
+};
+const equiv=[
+"🥛 Leche: 1 taza (250 ml) de leche 2% o 1 taza de yogurt natural sin azúcar.",
+"🥩 Carne (1 porción): 1 huevo, 2 rebanadas de queso Kraft o 1/3 taza de panela, 1 rebanada de jamón/bologna, 1 salchicha o 1 pierna de pollo.",
+"🍗 Comida (3 porciones): 1 pechuga completa de pollo, 1 pierna + 1 muslo, 1 lata de atún en agua o 200 g de carne.",
+"🌮 Cereal (1 porción): 1 tortilla, 1 rebanada de pan, 1 papa mediana, 3/4 taza Special K/Corn Flakes, 4 galletas María, 2 paquetes pequeños de saladas, 1/2 taza de avena, maíz, lentejas, chícharos, ejotes, arroz, pasta o frijoles.",
+"🍎 Fruta: manzana 1 mediana, papaya 3/4 taza, naranja 1 mediana, mandarina 1, sandía 1 taza, tuna (fruta) 1/2 taza, fresa 3/4 taza, toronja 1 pequeña, durazno 1, pera 1, piña 1 rebanada de 2.5 cm, ciruela 2 o melón 1/4. No plátano, mango, uvas ni pasas.",
+"🥬 Verduras: calabacita, apio, repollo, espinaca, coliflor, pepino, champiñones, lechuga, brócoli, nopales, acelgas, limón, jalapeño, serrano y pepinillos. Límite diario: 1 cebolla, 1 tomate y 2 zanahorias. Sin aguacate.",
+"🚫 Grasas: no agregar aceite, mayonesa, mantequilla, aderezos, tocino, crema ni aguacate. Preparar al horno, asado, cocido o al vapor."
+];
+const dayNames=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+const weekInfo=[
+{id:1,name:"Semana 1",dates:"14–20 septiembre"},{id:2,name:"Semana 2",dates:"21–27 septiembre"},{id:3,name:"Semana 3",dates:"28 septiembre–4 octubre"},{id:4,name:"Semana 4",dates:"5–11 octubre"}
+];
+const timesDefault=["15:15","16:30","19:30","23:30","03:30"];
+const mealNames=["Desayuno","Colación 1","Comida","Colación 2","Cena"], icons=["🍳","🥒","🍗","🥬","🌙"];
+function M(time,name,items){return {time,name,icon:icons[mealNames.indexOf(name)],items}}
+function D(b,s1,l,s2,d){return [M(timesDefault[0],"Desayuno",b),M(timesDefault[1],"Colación 1",[s1]),M(timesDefault[2],"Comida",l),M(timesDefault[3],"Colación 2",[s2]),M(timesDefault[4],"Cena",d)]}
+/* Todas las combinaciones respetan las cantidades fijas del plan médico. */
+const menus={
+1:[
+D(["1 huevo","Nopales + tomate + cebolla","2 tortillas","1 taza de leche 2%","1 manzana"],"Pepino + limón",["1 pechuga de pollo","1/2 taza de arroz","1/2 taza de frijoles","Lechuga + pepino + zanahoria","1 naranja"],"Nopales",["1 huevo","2 tortillas","3/4 taza de papaya","Espinaca + pepino"]),
+D(["1 huevo","Espinaca + pepino","2 tortillas","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["1 lata de atún en agua","2 tortillas","Lechuga + pepino + tomate + cebolla","1 manzana"],"Nopales",["1 rebanada de jamón","1/2 taza de frijoles + 1 tortilla","Calabacitas","1 naranja"]),
+D(["1 huevo","Nopales","1/2 taza de avena + 1 tortilla","1 taza de leche 2%","1 naranja"],"Pepino",["200 g de carne de res magra","1/2 taza de arroz + 1/2 taza de frijoles","Nopales + calabacitas","3/4 taza de papaya"],"Nopales",["1 huevo","2 tortillas","1 manzana","Espinaca + tomate"]),
+D(["1 huevo","Nopales","2 tortillas","1 taza de leche 2%","1 manzana"],"Pepino + limón",["1 pierna + 1 muslo de pollo","2 tortillas","Lechuga + pepino + zanahoria","1 naranja"],"Nopales",["1/3 taza de queso panela","2 tortillas","3/4 taza de papaya","Calabacitas + espinaca"]),
+D(["1 huevo","Calabacitas","1/2 taza de frijoles + 1 tortilla","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["1 pechuga de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Nopales + tomate + cebolla","1 manzana"],"Espinaca + pepino",["1 huevo","2 tortillas","1 naranja","Nopales + calabacitas"]),
+D(["1 rebanada de jamón","Nopales","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino",["1 lata de atún en agua","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","3/4 taza de papaya"],"Nopales",["1 huevo","1 papa mediana + 1 tortilla","1 manzana","Espinaca + tomate"]),
+D(["1 huevo","Espinaca","2 tortillas","1 taza de leche 2%","1 manzana"],"Pepino",["1 pierna + 1 muslo de pollo","2 tortillas","Lechuga + pepino + tomate","1 naranja"],"Nopales",["1 huevo","1/2 taza de frijoles + 1 tortilla","3/4 taza de papaya","Calabacitas + espinaca"])
+],
+2:[
+D(["1 huevo","Calabacitas + cebolla","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino",["1 pechuga de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Brócoli + lechuga + pepino","1 manzana"],"Nopales",["1 huevo","2 tortillas","3/4 taza de papaya","Espinaca"]),
+D(["1 rebanada de jamón","Espinaca + tomate","2 tortillas","1 taza de leche 2%","1 manzana"],"Nopales + limón",["1 lata de atún en agua","1/2 taza de pasta + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","1 naranja"],"Pepino",["1/3 taza de queso panela","2 tortillas","1 durazno","Calabacitas"]),
+D(["1 huevo","Nopales","1/2 taza de avena + 1 tortilla","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["200 g de carne de res magra","2 tortillas","Nopales + champiñones","1 naranja"],"Espinaca",["1 huevo","1/2 taza de arroz + 1 tortilla","1 manzana","Brócoli"]),
+D(["1 huevo","Espinaca + pepino","2 tortillas","1 taza de leche 2%","1 manzana"],"Nopales",["1 pierna + 1 muslo de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + tomate","3/4 taza de papaya"],"Pepino + limón",["1 rebanada de jamón","2 tortillas","1 naranja","Calabacitas + espinaca"]),
+D(["1 huevo","Nopales + jalapeño","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino",["1 pechuga de pollo","1/2 taza de pasta + 1/2 taza de frijoles","Brócoli + coliflor + lechuga","1 manzana"],"Nopales",["1 huevo","2 tortillas","3/4 taza de papaya","Calabacitas"]),
+D(["1 rebanada de jamón","Calabacitas","1/2 taza de frijoles + 1 tortilla","1 taza de leche 2%","3/4 taza de papaya"],"Espinaca + pepino",["1 lata de atún en agua","2 tortillas","Lechuga + pepino + zanahoria","1 naranja"],"Nopales",["1 huevo","1 papa mediana + 1 tortilla","1 manzana","Espinaca + tomate"]),
+D(["1 huevo","Nopales + tomate","2 tortillas","1 taza de leche 2%","1 manzana"],"Pepino",["1 pierna + 1 muslo de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + brócoli","1 naranja"],"Nopales",["1/3 taza de queso panela","2 tortillas","3/4 taza de papaya","Calabacitas + espinaca"])
+],
+3:[
+D(["1 huevo","Espinaca + cebolla","2 tortillas","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["1 pechuga de pollo","2 tortillas","Nopales + calabacitas + tomate","1 naranja"],"Nopales",["1 huevo","1/2 taza de frijoles + 1 tortilla","1 manzana","Espinaca"]),
+D(["1 rebanada de jamón","Nopales","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino + limón",["1 lata de atún en agua","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","3/4 taza de papaya"],"Espinaca",["1 huevo","2 tortillas","1 manzana","Calabacitas"]),
+D(["1 huevo","Calabacitas","1/2 taza de avena + 1 tortilla","1 taza de leche 2%","1 manzana"],"Nopales",["200 g de carne de res magra","1/2 taza de pasta + 1/2 taza de frijoles","Brócoli + champiñones + lechuga","1 naranja"],"Pepino",["1/3 taza de queso panela","2 tortillas","3/4 taza de papaya","Espinaca + pepino"]),
+D(["1 huevo","Nopales + pepino","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino",["1 pierna + 1 muslo de pollo","2 tortillas","Lechuga + espinaca + tomate","1 manzana"],"Nopales",["1 huevo","1/2 taza de arroz + 1 tortilla","3/4 taza de papaya","Calabacitas"]),
+D(["1 huevo","Espinaca","1/2 taza de frijoles + 1 tortilla","1 taza de leche 2%","3/4 taza de papaya"],"Pepino + limón",["1 pechuga de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Nopales + brócoli + cebolla","1 naranja"],"Nopales",["1 rebanada de jamón","2 tortillas","1 manzana","Calabacitas + espinaca"]),
+D(["1 rebanada de jamón","Calabacitas + tomate","2 tortillas","1 taza de leche 2%","1 manzana"],"Nopales",["1 lata de atún en agua","1/2 taza de pasta + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","3/4 taza de papaya"],"Pepino",["1 huevo","1 papa mediana + 1 tortilla","1 naranja","Espinaca"]),
+D(["1 huevo","Nopales","2 tortillas","1 taza de leche 2%","1 naranja"],"Pepino",["1 pierna + 1 muslo de pollo","2 tortillas","Lechuga + pepino + coliflor","1 manzana"],"Nopales",["1 huevo","1/2 taza de frijoles + 1 tortilla","3/4 taza de papaya","Calabacitas + espinaca"])
+],
+4:[
+D(["1 huevo","Nopales + tomate","2 tortillas","1 taza de leche 2%","1 manzana"],"Pepino",["1 pechuga de pollo","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","1 naranja"],"Espinaca",["1 huevo","2 tortillas","3/4 taza de papaya","Calabacitas"]),
+D(["1 rebanada de jamón","Espinaca + pepino","2 tortillas","1 taza de leche 2%","1 naranja"],"Nopales + limón",["1 lata de atún en agua","2 tortillas","Lechuga + pepino + tomate + cebolla","1 manzana"],"Pepino",["1/3 taza de queso panela","1/2 taza de frijoles + 1 tortilla","3/4 taza de papaya","Calabacitas"]),
+D(["1 huevo","Nopales","1/2 taza de avena + 1 tortilla","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["200 g de carne de res magra","1/2 taza de arroz + 1/2 taza de frijoles","Nopales + brócoli + champiñones","1 naranja"],"Espinaca",["1 huevo","2 tortillas","1 manzana","Calabacitas + pepino"]),
+D(["1 huevo","Calabacitas + cebolla","2 tortillas","1 taza de leche 2%","1 manzana"],"Nopales",["1 pierna + 1 muslo de pollo","1/2 taza de pasta + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","1 naranja"],"Pepino + limón",["1 rebanada de jamón","2 tortillas","3/4 taza de papaya","Espinaca"]),
+D(["1 huevo","Espinaca + tomate","1/2 taza de frijoles + 1 tortilla","1 taza de leche 2%","1 naranja"],"Pepino",["1 pechuga de pollo","2 tortillas","Nopales + calabacitas + lechuga","1 manzana"],"Nopales",["1 huevo","1/2 taza de arroz + 1 tortilla","3/4 taza de papaya","Espinaca + pepino"]),
+D(["1 rebanada de jamón","Nopales","2 tortillas","1 taza de leche 2%","3/4 taza de papaya"],"Pepino",["1 lata de atún en agua","1/2 taza de arroz + 1/2 taza de frijoles","Lechuga + pepino + zanahoria","1 naranja"],"Espinaca",["1 huevo","1 papa mediana + 1 tortilla","1 manzana","Calabacitas + tomate"]),
+D(["1 huevo","Espinaca + pepino","2 tortillas","1 taza de leche 2%","1 manzana"],"Nopales",["1 pierna + 1 muslo de pollo","2 tortillas","Lechuga + pepino + brócoli","1 naranja"],"Pepino",["1/3 taza de queso panela","1/2 taza de frijoles + 1 tortilla","3/4 taza de papaya","Nopales + calabacitas"])
+]
+};
+/* Banco de combinaciones tomado de las hojas proporcionadas por el usuario. Se conserva como recomendación; no reemplaza las porciones del plan médico. */
+const recomendaciones={
+Desayuno:[
+{n:"Huevo a la mexicana",i:"🥚",x:"1 huevo revuelto con 1/2 taza de chile, tomate y cebolla · 1/2 taza de frijoles molidos sin aceite · 1 tortilla de maíz · licuado de fresa (1 taza de leche al 2% + 3/4 taza de fresas + azúcar de dieta)."},
+{n:"Huevo con nopales",i:"🌵",x:"1 huevo revuelto con 1/2 taza de nopales, tomate, cebolla y chile · frijoles a la mexicana (1/2 taza) · 1 taza de leche · 2 rebanadas de melón."},
+{n:"Quesadilla con licuado de papaya",i:"🫓",x:"1/2 taza de frijoles a la mexicana · quesadilla con 1 tortilla de maíz + 2 rebanadas de queso para sándwich · licuado de papaya (1 taza de leche al 2% + 3/4 taza de papaya + azúcar de dieta)."},
+{n:"Sándwich de jamón",i:"🥪",x:"2 rebanadas de pan integral · 1 rebanada de jamón · tomate · cebolla · 1 chile jalapeño · 2–3 hojas de lechuga · 1 taza de yogurt natural con 2 rebanadas de melón."},
+{n:"Omelet de champiñones",i:"🍳",x:"1 huevo en torta con 1/2 taza de champiñones · 1/2 taza de frijoles enteros con 1/2 taza de chile, tomate y cebolla · 1 rebanada de pan tostado · licuado de papaya (1 taza de leche al 2% + 3/4 taza de papaya + azúcar de dieta)."},
+{n:"Quesadilla con verduras",i:"🫓",x:"Quesadilla con 2 tortillas de maíz + 2 rebanadas de queso para sándwich · 1 taza de verduras permitidas al vapor o cocidas · 1 taza de yogurt natural con 3/4 taza de fresas + azúcar de dieta."},
+{n:"Enfrijolada",i:"🌮",x:"1 tortilla de maíz con 1/2 taza de frijoles molidos sin aceite · 2 rebanadas de queso · salsa a la mexicana · 1 taza de leche · 1 manzana mediana."}
+],
+Comida:[
+{n:"Caldo de pollo",i:"🍲",x:"1 plato de caldo de pollo desgrasado con 1 pierna y 1 muslo pequeños + 2 tazas de verduras permitidas · 1/2 taza de arroz blanco cocido · 1 tortilla de maíz · 1 taza de gelatina sugar free · 2 rebanadas de melón."},
+{n:"Pechuga asada",i:"🍗",x:"1 pechuga asada, cocida o al vapor · 2 tazas de verduras permitidas · 1/2 taza de arroz · 1 tortilla de maíz · 1 manzana mediana."},
+{n:"Carne asada",i:"🥩",x:"100 g de carne · 2 tazas de verduras permitidas, cocidas, al vapor o en ensalada con vinagre o limón · 1/2 taza de frijoles enteros o de la olla · 1 tortilla de maíz · 1 durazno mediano."},
+{n:"Pollo con pasta y calabacitas",i:"🍝",x:"1 muslo de pollo cocido, asado o al vapor · 1 taza de espagueti con salsa de tomate + 1 rebanada de queso para sándwich · 1 1/2 tazas de calabacitas con tomate y cebolla + 1 rebanada de queso para sándwich · 2 rebanadas de melón."},
+{n:"Atún con verduras",i:"🐟",x:"1 lata de atún en agua con 2 tazas de verduras de la lista y limón · 12 cuadritos de galletas saladas · 1 taza de gelatina sugar free · 1 manzana mediana.",note:"Esta combinación sí usa atún en agua; no se incluye pescado fresco."},
+{n:"Pescado con espinacas",i:"🐟",x:"1 filete de pescado de 110 g a la plancha · 1 taza de espinacas cocidas · 1 taza de caldo de pollo con 1 taza de verduras · 2 tortillas de maíz · 1 durazno mediano.",note:"La hoja original incluye pescado fresco. La dejo identificada para que no se confunda con el atún en agua."},
+{n:"Pollo con calabacitas",i:"🍗",x:"1 muslo de pollo cocido · 1 taza de calabacitas con tomate y cebolla al vapor + 1/3 de taza de elote + 2 rebanadas de queso para sándwich · 1 tortilla de maíz · 1 taza de gelatina sugar free · 1 durazno mediano."}
+],
+Cena:[
+{n:"Sándwich de jamón",i:"🥪",x:"2 rebanadas de pan integral · 1 rebanada de jamón · tomate · cebolla · 1 chile jalapeño · 2–3 hojas de lechuga · 1 manzana mediana."},
+{n:"Quesadilla con verduras",i:"🫓",x:"2 tortillas de maíz · 2 rebanadas de queso para sándwich blanco o amarillo · 1 taza de verduras permitidas · 1 naranja mediana."},
+{n:"Frijoles a la mexicana + quesadilla",i:"🫘",x:"1/2 taza de frijoles enteros o de la olla con 1 taza de caldo + 1/2 taza de chile, tomate y cebolla · quesadilla con 1 tortilla de maíz + 2 rebanadas de queso · 3/4 de taza de papaya."},
+{n:"Espagueti con queso + calabacitas",i:"🍝",x:"1 taza de espagueti con salsa de tomate + 1 rebanada de queso para sándwich · 1/2 taza de calabacitas con tomate y cebolla al vapor + 1 rebanada de queso · 1 durazno mediano."},
+{n:"Omelet de champiñones",i:"🍳",x:"1 huevo en torta con 1/2 taza de champiñones · 1/2 taza de frijoles enteros con 1/2 taza de chile, tomate y cebolla · 1 rebanada de pan tostado · 2 rebanadas de melón."},
+{n:"Consomé de pollo",i:"🍲",x:"1 taza de caldo de pollo con 1/2 taza de verduras permitidas + 1 papa mediana cocida + 1 pierna de pollo · 1 tortilla de maíz · 1 manzana mediana."},
+{n:"Calabacitas con queso",i:"🥒",x:"1 taza de calabacitas con tomate y cebolla al vapor + 1/3 de taza de elote + 2 rebanadas de queso para sándwich · 1 tortilla de maíz · 1 naranja mediana."}
+]
+};
+let s=JSON.parse(localStorage.getItem("miPlanV7")||"{}");
+s.done=s.done||{};s.water=Number.isFinite(Number(s.water))?Math.max(0,Math.min(10,Number(s.water))):0;s.weights=s.weights||[];s.weightGoal=Number.isFinite(Number(s.weightGoal))?Number(s.weightGoal):null;s.weightPromptDismissedWeek=Number.isFinite(Number(s.weightPromptDismissedWeek))?Number(s.weightPromptDismissedWeek):0;s.shop=s.shop||{};s.times=s.times||timesDefault.slice();s.reminders=s.reminders!==false;s.reminderMeals=Array.isArray(s.reminderMeals)?s.reminderMeals:[true,true,true,true,true];s.reminderWater=s.reminderWater!==false;
+let currentWeek=+(localStorage.getItem("miPlanWeekV7")||1),currentDay=+(localStorage.getItem("miPlanDayV7")||0);
+function keyMeal(i,j){return currentWeek+"-"+currentDay+"-"+i+"-"+j}
+function save(){localStorage.setItem("miPlanV7",JSON.stringify(s));localStorage.setItem("miPlanWeekV7",currentWeek);localStorage.setItem("miPlanDayV7",currentDay)}
+function currentMeals(){return menus[currentWeek][currentDay]}
+function mealDone(i){let m=currentMeals()[i];return m.items.every((_,j)=>s.done[keyMeal(i,j)])}
+function dayProgress(d=currentDay,w=currentWeek){let ms=menus[w][d],done=0,total=0;ms.forEach((m,i)=>m.items.forEach((_,j)=>{total++;if(s.done[w+"-"+d+"-"+i+"-"+j])done++}));return total?Math.round(done/total*100):0}
+function allDaysProgress(w=currentWeek){return Math.round(menus[w].reduce((a,_,d)=>a+dayProgress(d,w),0)/7)}
+function resetDailyIfNeeded(){let today=localDateKey();if(s.waterDate!==today){s.water=0;s.waterDate=today;save()}else{s.water=Number.isFinite(Number(s.water))?Math.max(0,Math.min(10,Number(s.water))):0}}
+function localDateKey(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function nextMealText(){let now=new Date(),mins=now.getHours()*60+now.getMinutes(),best=null;for(let i=0;i<s.times.length;i++){let [h,m]=s.times[i].split(":").map(Number),t=h*60+m,d=t-mins;if(d<0)d+=1440;if(!best||d<best.d)best={d,i,t}}return best?`Próxima: ${mealNames[best.i]} · ${s.times[best.i]}`:""}
+function recommendationOptions(name){return recomendaciones[name]||[]}
+function openRecommendations(name){const list=recommendationOptions(name);const modal=document.getElementById("recommendModal");const body=document.getElementById("recommendBody");if(!modal||!body)return;body.innerHTML=`<div class="recTitle"><span style="font-size:28px">💡</span><div><h2 style="margin:0">Combinaciones para ${name}</h2><small class="muted">Inspiradas directamente en las hojas proporcionadas.</small></div></div>`+list.map((o,k)=>`<div class="recOption"><span class="sourceTag">RECOMENDACIÓN ${k+1}</span><h3>${o.i} ${o.n}</h3><p>${o.x}</p>${o.note?`<div class="recNote">ℹ️ ${o.note}</div>`:""}</div>`).join("")+`<div class="recNote"><b>Importante:</b> estas son combinaciones del material proporcionado. La aplicación no cambia ni prescribe por sí misma las cantidades del plan médico.</div>`;modal.classList.add("show")}
+function closeRecommendations(){const m=document.getElementById("recommendModal");if(m)m.classList.remove("show")}
+function render(){resetDailyIfNeeded();let w=weekInfo[currentWeek-1],ms=currentMeals();
+ document.getElementById("weekSelect").innerHTML=weekInfo.map(x=>`<option value="${x.id}">${x.name} · ${x.dates}</option>`).join("");document.getElementById("weekSelect").value=currentWeek;
+ document.getElementById("headerDate").textContent=w.dates+" · "+w.name;document.getElementById("weekHero").textContent=w.name+" · "+dayNames[currentDay];document.getElementById("homeDayBadge").textContent="Día "+(currentDay+1)+" de 7";
+ document.getElementById("daytabs").innerHTML=dayNames.map((d,i)=>`<button class="${i===currentDay?'active ':''}${dayProgress(i,currentWeek)===100?'done':''}" onclick="changeDay(${i})">${d}<br><small>${dayProgress(i,currentWeek)}%</small></button>`).join("");
+  document.getElementById("nextMeal").textContent=nextMealText();
+ document.getElementById("meals").innerHTML=ms.map((m,i)=>`<div class="meal ${mealDone(i)?'done':''}"><div class="mealhead"><h3>${m.icon} ${m.name}</h3><span class="time">${s.times[i]}</span></div>${m.items.map((x,j)=>`<label class="food"><input type="checkbox" ${s.done[keyMeal(i,j)]?"checked":""} onchange="toggle(${i},${j})"><span>${x}</span></label>`).join("")}${["Desayuno","Comida","Cena"].includes(m.name)?`<button class="recBtn" onclick="openRecommendations('${m.name}')">💡 Ver combinaciones recomendadas</button>`:""}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px"><span class="badge">${mealDone(i)?"✓ Completada":"Pendiente"}</span><button class="${mealDone(i)?"secondary":""}" onclick="completeMeal(${i})">${mealDone(i)?"✓ Completada":"Marcar como completada"}</button></div></div>`).join("");
+ document.getElementById("weekManager").innerHTML=weekInfo.map(x=>`<div class="row"><span><b>${x.name}</b><br><small class="muted">${x.dates} · 7 días completos</small></span><span class="badge">${allDaysProgress(x.id)}%</span></div>`).join("");
+ document.getElementById("planRules").innerHTML=[["🍳","Desayuno",plan.breakfast],["🥒","Colación 1",plan.snack],["🍗","Comida",plan.lunch],["🥒","Colación 2",plan.snack],["🌙","Cena",plan.dinner]].map(x=>`<div class="row"><span><b>${x[0]} ${x[1]}</b><br><small class="muted">${x[2]}</small></span></div>`).join("");
+ document.getElementById("equiv").innerHTML=equiv.map(x=>`<div class="food">${x}</div>`).join("");
+ renderShopping();document.getElementById("times").innerHTML=mealNames.map((n,i)=>`<div style="margin:10px 0"><label>${n}<input id="t${i}" type="time" value="${s.times[i]}"></label></div>`).join("");
+ renderReminders();
+ update();
+ maybePromptWeight();
+}
+function actualWeekForToday(){
+  const start=new Date(2026,8,14); start.setHours(0,0,0,0);
+  const today=new Date(); today.setHours(0,0,0,0);
+  const diff=Math.floor((today-start)/86400000);
+  if(diff<0||diff>27)return 0;
+  return Math.floor(diff/7)+1;
+}
+function hasWeightForWeek(w){
+  if(!w)return false;
+  return (s.weights||[]).some(x=>Number(x.week)===w);
+}
+function maybePromptWeight(){
+  const w=actualWeekForToday();
+  if(!w || currentWeek!==w || hasWeightForWeek(w) || Number(s.weightPromptDismissedWeek)===w)return;
+  const sheet=document.getElementById("sheet"), modal=document.getElementById("modal");
+  if(!sheet||!modal)return;
+  sheet.innerHTML=`<div class="weightPrompt"><div class="weightPromptIcon">⚖️</div><h2>Comencemos una nueva semana</h2><p class="muted">Registra tu peso actual para poder comparar tu progreso con la semana anterior.</p><div class="promptBox"><label><b>Peso actual</b><input id="weekWeightInput" type="number" step=".1" min="1" placeholder="Ej. 89.6" inputmode="decimal"><span class="muted">kg</span></label></div><div class="promptBtns"><button onclick="saveWeekStartWeight()">⚖️ Guardar peso</button><button class="secondary" onclick="dismissWeightPrompt()">Recordármelo después</button></div><p class="muted" style="margin-top:10px;font-size:11px">No bloquearemos la aplicación. Puedes registrarlo después desde Progreso.</p></div>`;
+  modal.classList.add("show");
+}
+function closeModal(){const m=document.getElementById("modal");if(m)m.classList.remove("show");}
+function dismissWeightPrompt(){s.weightPromptDismissedWeek=currentWeek;save();closeModal();}
+function saveWeekStartWeight(){
+  const el=document.getElementById("weekWeightInput"),v=parseFloat(el?.value);
+  if(!(v>0)){alert("Escribe un peso válido para guardarlo.");return;}
+  const d=new Date().toLocaleDateString("es-MX");
+  s.weights=s.weights.filter(x=>!(x.date===d));
+  s.weights.push({date:d,weight:v,week:currentWeek});
+  s.weightPromptDismissedWeek=currentWeek;
+  save();closeModal();update();
+}
+function renderWeightPanel(){
+  const el=document.getElementById("weightPanel"); if(!el)return;
+  const arr=s.weights||[];
+  if(!arr.length){el.innerHTML=`<div class="weightEmpty">📊 Todavía no tienes registros.<br>Guarda tu primer peso para comenzar a ver tu evolución.</div>`;return}
+  const last=arr[arr.length-1].weight, prev=arr.length>1?arr[arr.length-2].weight:null, delta=prev===null?null:Math.round((last-prev)*10)/10;
+  let deltaHtml=delta===null?`<span class="weightDelta weightSame">📌 Primer registro</span>`:delta<0?`<span class="weightDelta weightDown">⬇️ ${Math.abs(delta).toFixed(1)} kg desde la última medición</span>`:delta>0?`<span class="weightDelta weightUp">⬆️ ${delta.toFixed(1)} kg desde la última medición</span>`:`<span class="weightDelta weightSame">➡️ Sin cambio desde la última medición</span>`;
+  const vals=arr.slice(-7), min=Math.min(...vals.map(x=>x.weight)), max=Math.max(...vals.map(x=>x.weight)), range=Math.max(.5,max-min);
+  const bars=vals.map(x=>{let h=35+((x.weight-min)/range)*80;return `<div class="weightBar" style="height:${h}px"><small>${x.weight}</small></div>`}).join("");
+  const labels=vals.map(x=>`<span>${x.date.split("/").slice(0,2).join("/")}</span>`).join("");
+  const initial=arr[0].weight, total=Math.round((last-initial)*10)/10;
+  let stats=`<div class="weightStats"><div class="weightStat"><b>${initial} kg</b><small>Inicio</small></div><div class="weightStat"><b>${last} kg</b><small>Actual</small></div><div class="weightStat"><b>${total>0?"+":""}${total.toFixed(1)} kg</b><small>Desde inicio</small></div></div>`;
+  let goalHtml="";
+  if(s.weightGoal&&initial!==s.weightGoal){let pct=initial>s.weightGoal?((initial-last)/(initial-s.weightGoal))*100:((last-initial)/(s.weightGoal-initial))*100;pct=Math.max(0,Math.min(100,pct));goalHtml=`<div style="margin-top:12px"><div class="row" style="padding:4px 0"><span>Objetivo: <b>${s.weightGoal} kg</b></span><b>${Math.round(pct)}%</b></div><div class="goalProgress"><div style="width:${pct}%"></div></div><p class="muted" style="margin:7px 0 0">${pct>=100?"🏆 ¡Objetivo alcanzado!":last<s.weightGoal?"💪 Vas avanzando hacia tu objetivo.":"🔄 Observa la tendencia y continúa con constancia."}</p></div>`}
+  el.innerHTML=`<div class="weightHero"><div class="muted">Peso registrado más reciente</div><div class="weightValue">${last} kg</div>${deltaHtml}</div><div style="margin-top:4px"><b>📈 Evolución</b><div class="weightChart">${bars}</div><div class="weightLabels">${labels}</div></div>${stats}${goalHtml}`;
+}
+function update(){let ms=currentMeals(),c=ms.filter((_,i)=>mealDone(i)).length,p=dayProgress();document.getElementById("homeMealsStat").textContent=c+" / 5";document.getElementById("homeWaterStat").textContent=s.water+" / 10";document.getElementById("homeWeightStat").textContent=s.weights.length?s.weights.at(-1).weight+" kg":"—";let mot=document.getElementById("motivationCard");if(mot){let title="💪 Vamos paso a paso",msg="Completa tus comidas y mantén tu constancia.";if(p===100){title="🏆 ¡Día completado!";msg="Excelente trabajo. Todas las comidas de hoy están completas."}else if(p>=60){title="🔥 ¡Muy buen avance!";msg="Ya llevas más de la mitad de tu día. Sigue así."}else if(p>=20){title="🌱 ¡Ya comenzaste!";msg="Cada comida completada cuenta. Continúa con tu plan."}mot.innerHTML=`<b>${title}</b><p>${msg}</p>`;}document.getElementById("pct").textContent=p+"%";document.getElementById("pct2").textContent=p+"%";document.getElementById("fill").style.width=p+"%";document.getElementById("waterBig").textContent=s.water+" / 10";document.getElementById("waterDots").innerHTML=Array.from({length:10},(_,i)=>`<span class="${i<s.water?'on':''}">${i<s.water?'💧':'○'}</span>`).join("");document.getElementById("weekStat").textContent=allDaysProgress()+"%";document.getElementById("waterStat").textContent=s.water+" / 10";document.getElementById("mealStat").textContent=c+" / 5";document.getElementById("weekProgress").textContent=allDaysProgress()+"% semana";document.getElementById("weight").value=s.weights.at(-1)?.weight||"";document.getElementById("weightGoal").value=s.weightGoal||"";renderWeightPanel();document.getElementById("history").innerHTML=s.weights.length?`<div class="muted" style="margin-bottom:6px">Historial</div>`+s.weights.map((x,i)=>`<div class="row" style="gap:8px"><span>${x.date}</span><span style="display:flex;align-items:center;gap:8px"><b>${x.weight} kg</b><button type="button" onclick="editWeightHistoryItem(${i})" style="padding:7px 10px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer">✏️ Editar</button></span></div>`).join(""):"<div class=\"muted\" style=\"font-size:12px\">No hay registros de peso guardados.</div>"}
+
+
+function editWeightHistoryItem(index){
+  index = Number(index);
+  if (!Number.isInteger(index) || !Array.isArray(s.weights) || !s.weights[index]) return;
+
+  const item = s.weights[index];
+  const corrected = window.prompt("Edita el peso de " + item.date + " (kg):", String(item.weight));
+  if (corrected === null) return;
+
+  const value = parseFloat(String(corrected).trim().replace(",", "."));
+  if (!Number.isFinite(value) || value <= 0 || value > 500) {
+    window.alert("Introduce un peso válido.");
+    return;
+  }
+
+  s.weights[index].weight = value;
+  save();
+  update();
+}
+
+function saveWeightGoal(){let v=parseFloat(document.getElementById("weightGoal").value);s.weightGoal=(v>0?v:null);save();update();}
+
+function autoAdvanceIfDayComplete(){
+  if(dayProgress()!==100)return false;
+  // Al completar todas las casillas del día, avanzar automáticamente al siguiente día.
+  // El usuario puede volver a cualquier día anterior desde las pestañas superiores.
+  if(currentDay<6){
+    currentDay++;
+  }else if(currentWeek<4){
+    currentWeek++;
+    currentDay=0;
+  }else{
+    return false;
+  }
+  save();
+  return true;
+}
+function toggle(i,j){
+  s.done[keyMeal(i,j)]=!s.done[keyMeal(i,j)];
+  save();
+  if(autoAdvanceIfDayComplete()){
+    render();
+    setTimeout(()=>alert("¡Día completado! Pasamos al siguiente día."),50);
+  }else{
+    render();
+  }
+}
+function completeMeal(i){
+  let done=mealDone(i);
+  currentMeals()[i].items.forEach((_,j)=>s.done[keyMeal(i,j)]=!done);
+  save();
+  if(autoAdvanceIfDayComplete()){
+    render();
+    setTimeout(()=>alert("¡Día completado! Pasamos al siguiente día."),50);
+  }else{
+    render();
+  }
+}
+function changeWeek(v){currentWeek=+v;currentDay=0;save();render()}
+function changeDay(i){currentDay=i;save();render()}
+function water(n){resetDailyIfNeeded();s.water=Number(s.water)||0;s.water=n?Math.min(10,s.water+1):0;save();update()}
+function saveWeight(){let v=parseFloat(document.getElementById("weight").value);if(!(v>0))return;let d=new Date().toLocaleDateString("es-MX");s.weights=s.weights.filter(x=>x.date!==d);s.weights.push({date:d,weight:v,week:currentWeek});s.weightPromptDismissedWeek=currentWeek;save();update();alert("Peso guardado") }
+function saveTimes(){s.times=mealNames.map((_,i)=>document.getElementById("t"+i).value);save();render();alert("Horarios guardados")}
+function renderReminders(){
+  const el=document.getElementById("remindersList"); if(!el)return;
+  const rows=mealNames.map((n,i)=>`<div class="reminderCard ${s.reminderMeals[i]?"reminderOn":""}"><div class="reminderHead"><div><b>${icons[i]} ${n}</b><br><small class="muted">Aviso a las ${s.times[i]}</small></div><label class="switch"><input type="checkbox" ${s.reminderMeals[i]?"checked":""} onchange="setMealReminder(${i},this.checked)"><span class="slider"></span></label></div></div>`).join("");
+  el.innerHTML=rows+`<div class="reminderCard ${s.reminderWater?"reminderOn":""}"><div class="reminderHead"><div><b>💧 Agua</b><br><small class="muted">Recordatorio para mantener tu meta de 10 vasos</small></div><label class="switch"><input type="checkbox" ${s.reminderWater?"checked":""} onchange="setWaterReminder(this.checked)"><span class="slider"></span></label></div></div>`;
+  const st=document.getElementById("reminderStatus"); if(st)st.textContent=s.reminders?"Recordatorios preparados. Para avisos fiables con la app cerrada, se configurarán como alarmas del sistema en el APK Android.":"Recordatorios desactivados.";
+}
+function setMealReminder(i,v){s.reminderMeals[i]=!!v;s.reminders=s.reminderMeals.some(Boolean)||s.reminderWater;save();renderReminders()}
+function setWaterReminder(v){s.reminderWater=!!v;s.reminders=s.reminderMeals.some(Boolean)||s.reminderWater;save();renderReminders()}
+function notify(){if(!("Notification"in window)){alert("Tu navegador no permite notificaciones.");return} Notification.requestPermission().then(x=>{if(x==="granted"){s.reminders=true;save();renderReminders();alert("Permiso concedido. Los recordatorios fiables con la app cerrada se configurarán en la versión APK Android.")}else alert("Permiso no concedido")})}
+
+function shopData(){
+  const w=menus[currentWeek];
+  const all=w.flat().map(m=>m.items).flat().join(" | ").toLowerCase();
+  const count=(re)=>{let m=all.match(re);return m?m.length:0};
+  const data=[];
+  const add=(name,need,unit,group="Alimentos",note="")=>data.push({name,need,unit,group,note});
+  const tortillas=(all.match(/\b(\d+) tortillas?/g)||[]).reduce((a,x)=>a+Number(x.match(/\d+/)[0]),0)+(all.match(/\b1 tortilla\b/g)||[]).length;
+  const eggs=count(/\b1 huevo\b/g); const milk=7;
+  const tuna=count(/\b1 lata de atún en agua\b/g); const beef=count(/\b200 g de carne de res magra\b/g)*200;
+  const ham=count(/\b1 rebanada de jamón\b/g); const panela=count(/\b1\/3 taza de queso panela\b/g);
+  const breasts=count(/\b1 pechuga de pollo\b/g); const legthigh=count(/\b1 pierna \+ 1 muslo de pollo\b/g);
+  add("Tortillas",tortillas,"piezas","Cereales");
+  add("Huevo",eggs,"piezas","Proteínas");
+  add("Leche 2%",milk*250/1000,"L","Lácteos",milk+" tazas de 250 ml = "+(milk*250/1000).toFixed(2)+" L");
+  if(breasts) add("Pechuga de pollo",breasts,"piezas","Proteínas");
+  if(legthigh) add("Pierna + muslo de pollo",legthigh,"juegos","Proteínas");
+  if(tuna) add("Atún en agua",tuna,"latas","Proteínas");
+  if(beef) add("Carne de res magra",beef,"g","Proteínas");
+  if(ham) add("Jamón",ham,"rebanadas","Proteínas");
+  if(panela) add("Queso panela",panela,"1/3 taza","Lácteos");
+  const simple=[
+    ["Arroz",/1\/2 taza de arroz/g,"1/2 taza","Cereales"],["Frijoles",/1\/2 taza de frijoles/g,"1/2 taza","Cereales"],["Avena",/1\/2 taza de avena/g,"1/2 taza","Cereales"],["Pasta",/1\/2 taza de pasta/g,"1/2 taza","Cereales"],["Papa",/1 papa mediana/g,"piezas","Cereales"],
+    ["Manzana",/1 manzana/g,"piezas","Frutas"],["Naranja",/1 naranja/g,"piezas","Frutas"],["Papaya",/3\/4 taza de papaya/g,"3/4 taza","Frutas"],["Durazno",/1 durazno/g,"piezas","Frutas"],
+    ["Zanahoria",/zanahoria/g,"piezas","Verduras","Límite del plan: máximo 2 al día. La app usa este límite para no sobrepasarlo."],["Tomate",/tomate/g,"piezas","Verduras","Límite del plan: máximo 1 al día. La app usa este límite para no sobrepasarlo."],["Cebolla",/cebolla/g,"piezas","Verduras","Límite del plan: máximo 1 al día. La app usa este límite para no sobrepasarlo."],["Limón",/limón/g,"al gusto","Complementos"]
+  ];
+  simple.forEach(([n,re,u,g,note])=>{let q=(all.match(re)||[]).length;if(q)add(n,q,u,g,note||"")});
+
+  // Estas verduras están indicadas por el plan como "a llenar".
+  // Por eso NO se calcula una cantidad médica. Se muestra una sugerencia práctica de compra, editable por el usuario.
+  const vegSuggestions=[
+    ["Pepino",1.5,"kg","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Nopales",1.5,"kg","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Espinaca",2,"manojos/bolsas","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Calabacita",1,"kg","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Lechuga",2,"piezas","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Brócoli",2,"piezas","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Coliflor",1,"pieza","Verdura a llenar; cantidad de compra sugerida, no indicación médica."],
+    ["Champiñones",500,"g","Verdura a llenar; cantidad de compra sugerida, no indicación médica."]
+  ];
+  vegSuggestions.forEach(([n,need,unit,note])=>{
+    const re=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"i");
+    if(re.test(all)) add(n,need,unit,"Verduras",note);
+  });
+  return data;
+}
+function shopState(){s.shop=s.shop||{};s.shop[currentWeek]=s.shop[currentWeek]||{};return s.shop[currentWeek]}
+function shopTab(tab){s.shopTab=tab;save();renderShopping()}
+function shopHave(name){return !!shopState().have?.[name]}
+function setShopHave(name,v){let st=shopState();st.have=st.have||{};st.have[name]=!!v;save();renderShopping()}
+function renderShopping(){
+  const tab=s.shopTab||"need", data=shopData(), st=shopState();st.have=st.have||{};st.bought=st.bought||{};
+  document.getElementById("shopTabNeed").classList.toggle("active",tab==="need");document.getElementById("shopTabHome").classList.toggle("active",tab==="home");document.getElementById("shopTabBuy").classList.toggle("active",tab==="buy");
+  let html=`<div class="shopsummary"><b>${weekInfo[currentWeek-1].name}</b><br><span class="muted">Lista base calculada a partir de los 7 días de esta semana. Todavía no se ha descontado tu despensa.</span></div>`;
+  if(tab==="need"){
+    html+=`<div class="shopsummary"><b>🥬 ¿Cómo funciona la verdura?</b><br><span class="muted">En tu plan médico, varias verduras aparecen como <b>“a llenar”</b>. Eso significa que no hay una cantidad médica fija en gramos o kilos. Por eso la app muestra una <b>sugerencia práctica de compra</b> para tener suficiente durante la semana; puedes cambiarla al revisar tu despensa.</span></div>`;
+    const groups=["Proteínas","Lácteos","Cereales","Frutas","Verduras","Complementos"];
+    groups.forEach(g=>{let rows=data.filter(x=>x.group===g);if(!rows.length)return;html+=`<div class="shopbox"><b>${g}</b>`;rows.forEach(x=>{let note=x.note||"Necesario para la semana"; let display=typeof x.need==="number"?x.need:x.need; html+=`<div class="shoprow"><div><b>${x.name}</b><small>${note}</small></div><div style="text-align:right"><b>${display}</b><small>${x.unit}</small></div></div>`});html+=`</div>`});
+    html+=`<button style="width:100%;margin-top:8px" onclick="shopTab('home')">➡️ Revisar lo que tengo en casa</button>`;
+  } else if(tab==="home"){
+    html+=`<div class="shopsummary"><b>🏠 Paso 2: revisa tu despensa</b><br><span class="muted">Solo indica si ya tienes cada producto en casa. Si lo tienes, la app lo descontará de la lista de compras; no necesitas escribir cantidades.</span></div>`;
+        data.forEach(x=>{let have=shopHave(x.name);html+=`<label class="shoprow ${have?"shopdone":""}"><div><b>${x.name}</b><small>Necesitas: ${x.need} ${x.unit}</small></div><div style="text-align:right"><input type="checkbox" ${have?"checked":""} onchange="setShopHave('${x.name.replace(/'/g,"\\'")}',this.checked)"><br><small style="font-weight:700;color:${have?"var(--g)":"var(--muted)"}">${have?"✓ Ya tengo":"○ No tengo"}</small></div></label>`});
+    html+=`<button style="width:100%;margin-top:10px" onclick="shopTab('buy')">➡️ Ver lo que realmente debo comprar</button>`;
+  } else {
+    const faltantes=data.map(x=>{let have=shopHave(x.name);let f=(typeof x.need==="number"?(have?0:x.need):x.need);return {...x,faltante:f,have}}).filter(x=>typeof x.faltante==="number"?x.faltante>0:true);
+    html+=`<div class="shopsummary"><b>🛍️ Paso 3: compra final</b><br><span class="muted">Aquí aparece únicamente lo que falta después de revisar tu casa.</span></div>`;
+    if(!faltantes.length) html+=`<div class="shopempty">🎉 No tienes faltantes registrados.</div>`;
+    else {
+      const groups=["Proteínas","Lácteos","Cereales","Frutas","Verduras","Complementos"];
+      groups.forEach(g=>{let rows=faltantes.filter(x=>x.group===g);if(!rows.length)return;html+=`<div class="shopbox"><b>${g}</b>`;rows.forEach(x=>{let val=x.faltante;html+=`<div class="shoprow"><div><b>${x.name}</b><small>${x.note||"Para la semana"}</small></div><div style="text-align:right"><b>${val}</b><small>${x.unit}</small></div></div>`});html+=`</div>`});
+      html+=`<button class="waSend whatsappBtn" style="width:100%;margin-top:12px" onclick="shareShoppingWhatsApp()"><svg class="waIcon" viewBox="0 0 24 24" aria-hidden="true">
+<path d="M20.5 3.5A11.85 11.85 0 0 0 12.05 0C5.49 0 .15 5.34.15 11.9c0 2.1.55 4.15 1.6 5.95L.05 24l6.3-1.65a11.85 11.85 0 0 0 5.69 1.45h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.45-8.4Zm-8.45 18.3h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.23-.37a9.9 9.9 0 0 1-1.52-5.27C2.16 6.43 6.6 1.99 12.06 1.99c2.64 0 5.12 1.03 6.98 2.89a9.82 9.82 0 0 1 2.89 7c0 5.46-4.44 9.92-9.88 9.92Zm5.43-7.43c-.3-.15-1.78-.88-2.06-.98-.28-.1-.48-.15-.69.15-.2.3-.79.98-.97 1.18-.18.2-.36.22-.66.07-.3-.15-1.25-.46-2.39-1.48-.88-.78-1.48-1.74-1.65-2.04-.17-.3-.02-.46.13-.61.13-.13.3-.36.45-.54.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.69-1.65-.94-2.26-.25-.59-.5-.51-.69-.52h-.59c-.2 0-.53.07-.81.38-.28.3-1.06 1.04-1.06 2.54s1.08 2.95 1.23 3.15c.15.2 2.13 3.25 5.16 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.78-.73 2.03-1.43.25-.7.25-1.3.18-1.43-.07-.13-.28-.2-.58-.35Z"/>
+</svg><span>Enviar lista por WhatsApp</span></button>`;
+    }
+    html+=`<div style="display:flex;gap:8px;margin-top:12px"><button style="flex:1" onclick="shopTab('home')">⬅️ Revisar casa</button><button style="flex:1" class="secondary" onclick="clearShopWeek()">Reiniciar semana</button></div>`;
+  }
+  document.getElementById("shop").innerHTML=html;
+}
+
+function shareShoppingWhatsApp(){
+  const data=shopData();
+  const faltantes=data.map(x=>{const have=shopHave(x.name);return {...x,faltante:(typeof x.need==="number"?(have?0:x.need):x.need)}}).filter(x=>typeof x.faltante==="number"?x.faltante>0:true);
+  if(!faltantes.length){alert("No hay productos pendientes de compra.");return}
+  const groups=["Proteínas","Lácteos","Cereales","Frutas","Verduras","Complementos"];
+  let text=`🛒 LISTA DE COMPRAS\n${weekInfo[currentWeek-1].name}\n\n`;
+  groups.forEach(g=>{
+    const items=faltantes.filter(x=>x.group===g); if(!items.length)return;
+    text+=`*${g}*\n`;
+    items.forEach(x=>{text+=`☐ ${x.name} — ${x.faltante} ${x.unit}\n`;});
+    text+='\n';
+  });
+  text+='Lista generada desde Mi Plan de Alimentación.';
+  if(navigator.share){
+    navigator.share({title:`Lista de compras - ${weekInfo[currentWeek-1].name}`,text}).catch(()=>{});
+  }else{
+    const url='https://wa.me/?text='+encodeURIComponent(text);
+    window.open(url,'_blank');
+  }
+}
+
+function clearShopWeek(){if(confirm("¿Reiniciar lo que tienes marcado como disponible en casa para esta semana?")){s.shop[currentWeek]={};save();renderShopping()}}
+
+function go(id,b){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active")}
+render();
+
+
+
+</script>
+
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body></html>
